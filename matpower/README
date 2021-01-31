@@ -1,0 +1,62 @@
+   MATPOWER Practical
+  -------------------
+
+This directory contains the source code for three Fortran programs 
+  - matpower
+  - naive
+  - blas_matpower
+
+Each programs read an input file (called input) consisting of
+ an integer value		n
+
+
+
+The programs programs generate a unit matrix (Nside*Nside)
+and calculate M^n then output the non-zero elements of the result 
+matpower and naive use different algorithms.
+blas_matpower uses the same algorithm as matpower but uses the blas library to
+implement the matrix multiplication.
+
+
+
+
+Build the programs using "make". This will use the -pg
+flag to enable profiling. 
+
+Run the matpower program using:
+   ./matpower 
+
+The value of "n" (the input dataset) is read from a file called "input"
+
+If you are running on Cirrus then you can use the supplied batch script
+matpower.pbs though you will have to add the budget you want to use
+(and and any reservation) on the command line.
+
+
+* How long does the program take to run?
+
+* What floating point performance does it achieve?
+
+View the program execution profile by running:
+  gprof matpower
+This will read data from the gmon.out file produced by the program run.
+
+
+* Which subroutine takes the most time?
+
+
+Now repeat this process using the second input file "input2" but without
+recompiling the program. (You will have to rename this to "input")
+
+* Are the performance results different ?
+
+* Based on the results of both profiles which subroutines should be candidates for optimisation?
+
+
+Compare the performance of the program "naive" with matpower. 
+Use the small input datasets
+small_input and small_input2 for this to avoid long run-times.
+
+* how do the two programs compare?
+
+* can you work out how the two algorithms differ?
