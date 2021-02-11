@@ -208,6 +208,8 @@ extern void tuned_STREAM_Copy();
 extern void tuned_STREAM_Scale(STREAM_TYPE scalar);
 extern void tuned_STREAM_Add();
 extern void tuned_STREAM_Triad(STREAM_TYPE scalar);
+extern void tuned_STREAM_Strided();
+extern void tuned_STREAM_Strided4();
 #endif
 #ifdef _OPENMP
 extern int omp_get_num_threads();
