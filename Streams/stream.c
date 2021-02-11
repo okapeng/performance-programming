@@ -358,22 +358,22 @@ main()
 
 	times[4][k] = mysecond();
 #ifdef TUNED
-        // tuned_STREAM_Copy();
+        tuned_STREAM_Strided();
 #else
 #pragma omp parallel for
-	for (j=0; j<STREAM_ARRAY_SIZE; j++)
-	    d[j/2] = a[j];
+	for (j=0; j<(STREAM_ARRAY_SIZE/2); j++)
+	    d[j] = a[2*j];
 #endif
 	times[4][k] = mysecond() - times[4][k];
 
 		
 	times[5][k] = mysecond();
 #ifdef TUNED
-        // tuned_STREAM_Copy();
+        tuned_STREAM_Strided4();
 #else
 #pragma omp parallel for
-	for (j=0; j<STREAM_ARRAY_SIZE; j++)
-	    e[j/4] = a[j];
+	for (j=0; j<(STREAM_ARRAY_SIZE/4); j++)
+	    e[j] = a[4*j];
 #endif
 	times[5][k] = mysecond() - times[5][k];
 	}
@@ -611,6 +611,22 @@ void tuned_STREAM_Triad(STREAM_TYPE scalar)
 #pragma omp parallel for
 	for (j=0; j<STREAM_ARRAY_SIZE; j++)
 	    a[j] = b[j]+scalar*c[j];
+}
+
+void tuned_STREAM_Strided()
+{
+	ssize_t j;
+#pragma omp parallel for
+        for (j=0; j<(STREAM_ARRAY_SIZE/2); j++)
+	    	d[j] = a[2*j];
+}
+
+void tuned_STREAM_Strided4()
+{
+	ssize_t j;
+#pragma omp parallel for
+        for (j=0; j<(STREAM_ARRAY_SIZE/4); j++)
+	    	d[j] = a[4*j];
 }
 /* end of stubs for the "tuned" versions of the kernels */
 #endif
