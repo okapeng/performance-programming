@@ -124,6 +124,10 @@
 #   define OFFSET	0
 #endif
 
+#ifndef NTESTS
+#   define NTESTS	6
+#endif
+
 /*
  *	3) Compile the code with optimization.  Many compilers generate
  *       unreasonably bad code before the optimizer tightens things up.  
@@ -180,17 +184,19 @@ static STREAM_TYPE	a[STREAM_ARRAY_SIZE+OFFSET],
 			b[STREAM_ARRAY_SIZE+OFFSET],
 			c[STREAM_ARRAY_SIZE+OFFSET];
 
-static double	avgtime[4] = {0}, maxtime[4] = {0},
-		mintime[4] = {FLT_MAX,FLT_MAX,FLT_MAX,FLT_MAX};
+static double	avgtime[NTESTS] = {0}, maxtime[NTESTS] = {0},
+		mintime[NTESTS] = {FLT_MAX,FLT_MAX,FLT_MAX,FLT_MAX};
 
-static char	*label[4] = {"Copy:      ", "Scale:     ",
-    "Add:       ", "Triad:     "};
+static char	*label[NTESTS] = {"Copy:      ", "Scale:     ",
+    "Add:       ", "Triad:     ", "Strided:     ", "Strided4:     "};
 
-static double	bytes[4] = {
+static double	bytes[NTESTS] = {
     2 * sizeof(STREAM_TYPE) * STREAM_ARRAY_SIZE,
     2 * sizeof(STREAM_TYPE) * STREAM_ARRAY_SIZE,
     3 * sizeof(STREAM_TYPE) * STREAM_ARRAY_SIZE,
-    3 * sizeof(STREAM_TYPE) * STREAM_ARRAY_SIZE
+    3 * sizeof(STREAM_TYPE) * STREAM_ARRAY_SIZE,
+    2 * sizeof(STREAM_TYPE) * STREAM_ARRAY_SIZE,
+    2 * sizeof(STREAM_TYPE) * STREAM_ARRAY_SIZE
     };
 
 extern double mysecond();
@@ -212,7 +218,7 @@ main()
     int			k;
     ssize_t		j;
     STREAM_TYPE		scalar;
-    double		t, times[4][NTIMES];
+    double		t, times[NTESTS][NTIMES];
 
     /* --- SETUP --- determine precision and check timing --- */
 
@@ -345,13 +351,29 @@ main()
 	    a[j] = b[j]+scalar*c[j];
 #endif
 	times[3][k] = mysecond() - times[3][k];
+#ifdef TUNED
+        tuned_STREAM_Copy();
+#else
+#pragma omp parallel for
+	for (j=0; j<(STREAM_ARRAY_SIZE/2); j++)
+	    c[j] = a[2j];
+#endif
+	times[4][k] = mysecond() - times[4][k];
+#ifdef TUNED
+        tuned_STREAM_Copy();
+#else
+#pragma omp parallel for
+	for (j=0; j<(STREAM_ARRAY_SIZE/4); j++)
+	    c[j] = a[4j];
+#endif
+	times[5][k] = mysecond() - times[5][k];
 	}
 
     /*	--- SUMMARY --- */
 
     for (k=1; k<NTIMES; k++) /* note -- skip first iteration */
 	{
-	for (j=0; j<4; j++)
+	for (j=0; j<NTESTS; j++)
 	    {
 	    avgtime[j] = avgtime[j] + times[j][k];
 	    mintime[j] = MIN(mintime[j], times[j][k]);
@@ -360,7 +382,7 @@ main()
 	}
     
     printf("Function    Best Rate MB/s  Avg time     Min time     Max time\n");
-    for (j=0; j<4; j++) {
+    for (j=0; j<NTESTS; j++) {
 		avgtime[j] = avgtime[j]/(double)(NTIMES-1);
 
 		printf("%s%12.1f  %11.6f  %11.6f  %11.6f\n", label[j],
