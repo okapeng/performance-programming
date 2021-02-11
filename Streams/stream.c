@@ -356,7 +356,7 @@ main()
 #else
 #pragma omp parallel for
 	for (j=0; j<(STREAM_ARRAY_SIZE/2); j++)
-	    c[j] = a[2j];
+	    c[j] = a[2*j];
 #endif
 	times[4][k] = mysecond() - times[4][k];
 #ifdef TUNED
@@ -364,7 +364,7 @@ main()
 #else
 #pragma omp parallel for
 	for (j=0; j<(STREAM_ARRAY_SIZE/4); j++)
-	    c[j] = a[4j];
+	    c[j] = a[4*j];
 #endif
 	times[5][k] = mysecond() - times[5][k];
 	}
