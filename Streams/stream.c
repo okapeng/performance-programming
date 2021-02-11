@@ -367,7 +367,7 @@ main()
 	    d[j] = a[2*j];
 #endif
 	times[4][k] = mysecond() - times[4][k];
-	if(times[4][k]) printf("time[4][%d] = %f", k, times[4][k]);
+	if(times[4][k] == 0.0) printf("time[4][%d] = %f", k, times[4][k]);
 		
 	times[5][k] = mysecond();
 #ifdef TUNED
@@ -378,7 +378,7 @@ main()
 	    e[j] = a[4*j];
 #endif
 	times[5][k] = mysecond() - times[5][k];
-	if(times[5][k]) printf("time[5][%d] = %f", k, times[5][k]);
+	if(times[5][k] == 0.0) printf("time[5][%d] = %f", k, times[5][k]);
 	}
 
     /*	--- SUMMARY --- */
