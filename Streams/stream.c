@@ -355,6 +355,8 @@ main()
 	    a[j] = b[j]+scalar*c[j];
 #endif
 	times[3][k] = mysecond() - times[3][k];
+
+	times[4][k] = mysecond();
 #ifdef TUNED
         tuned_STREAM_Copy();
 #else
@@ -363,6 +365,9 @@ main()
 	    d[j] = a[2*j];
 #endif
 	times[4][k] = mysecond() - times[4][k];
+
+		
+	times[5][k] = mysecond();
 #ifdef TUNED
         tuned_STREAM_Copy();
 #else
