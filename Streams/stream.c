@@ -185,7 +185,7 @@ static STREAM_TYPE	a[STREAM_ARRAY_SIZE+OFFSET],
 			c[STREAM_ARRAY_SIZE+OFFSET];
 
 static double	avgtime[NTESTS] = {0}, maxtime[NTESTS] = {0},
-		mintime[NTESTS] = {FLT_MAX,FLT_MAX,FLT_MAX,FLT_MAX};
+		mintime[NTESTS] = {FLT_MAX,FLT_MAX,FLT_MAX,FLT_MAX,FLT_MAX,FLT_MAX};
 
 static char	*label[NTESTS] = {"Copy:      ", "Scale:     ",
     "Add:       ", "Triad:     ", "Strided:     ", "Strided4:     "};
