@@ -372,8 +372,8 @@ main()
 	for (j=0; j<(STREAM_ARRAY_SIZE/2); j++)
 	    d[j] = a[2*j];
 #endif
-	times[4][k] = mysecond() - times[4][k];
-	printf("time[4][%d] = %f   j = %d\n\n", k, times[4][k],j);
+	// times[4][k] = mysecond() - times[4][k];
+	printf("time[4][%d] = %11.6f   j = %d\n\n", k, times[4][k],j);
 		
 	times[5][k] = mysecond();
 #ifdef TUNED
@@ -383,8 +383,8 @@ main()
 	for (j=0; j<(STREAM_ARRAY_SIZE/4); j++)
 	    e[j] = a[4*j];
 #endif
-	times[5][k] = mysecond() - times[5][k];
-	printf("time[5][%d] = %f   j = %d\n", k, times[5][k],j);
+	// times[5][k] = mysecond() - times[5][k];
+	printf("time[5][%d] = %11.6f   j = %d\n", k, times[5][k], j);
 	}
 
     /*	--- SUMMARY --- */
