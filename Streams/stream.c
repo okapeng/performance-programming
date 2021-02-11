@@ -182,7 +182,9 @@
 
 static STREAM_TYPE	a[STREAM_ARRAY_SIZE+OFFSET],
 			b[STREAM_ARRAY_SIZE+OFFSET],
-			c[STREAM_ARRAY_SIZE+OFFSET];
+			c[STREAM_ARRAY_SIZE+OFFSET],
+			d[(STREAM_ARRAY_SIZE+OFFSET)/2],
+			e[(STREAM_ARRAY_SIZE+OFFSET)/4];
 
 static double	avgtime[NTESTS] = {0}, maxtime[NTESTS] = {0},
 		mintime[NTESTS] = {FLT_MAX,FLT_MAX,FLT_MAX,FLT_MAX,FLT_MAX,FLT_MAX};
@@ -275,6 +277,8 @@ main()
 	    a[j] = 1.0;
 	    b[j] = 2.0;
 	    c[j] = 0.0;
+		d[int(j/2)] = 0.0;
+		e[int(j/4)] = 0.0;
 	}
 
     printf(HLINE);
@@ -356,7 +360,7 @@ main()
 #else
 #pragma omp parallel for
 	for (j=0; j<(STREAM_ARRAY_SIZE/2); j++)
-	    c[j] = a[2*j];
+	    d[j] = a[2*j];
 #endif
 	times[4][k] = mysecond() - times[4][k];
 #ifdef TUNED
@@ -364,7 +368,7 @@ main()
 #else
 #pragma omp parallel for
 	for (j=0; j<(STREAM_ARRAY_SIZE/4); j++)
-	    c[j] = a[4*j];
+	    e[j] = a[4*j];
 #endif
 	times[5][k] = mysecond() - times[5][k];
 	}
