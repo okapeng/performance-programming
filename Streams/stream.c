@@ -358,22 +358,22 @@ main()
 
 	times[4][k] = mysecond();
 #ifdef TUNED
-        tuned_STREAM_Copy();
+        // tuned_STREAM_Copy();
 #else
 #pragma omp parallel for
-	for (j=0; j<(STREAM_ARRAY_SIZE/2); j++)
-	    d[j] = a[2*j];
+	for (j=0; j<STREAM_ARRAY_SIZE; j++)
+	    d[j/2] = a[j];
 #endif
 	times[4][k] = mysecond() - times[4][k];
 
 		
 	times[5][k] = mysecond();
 #ifdef TUNED
-        tuned_STREAM_Copy();
+        // tuned_STREAM_Copy();
 #else
 #pragma omp parallel for
-	for (j=0; j<(STREAM_ARRAY_SIZE/4); j++)
-	    e[j] = a[4*j];
+	for (j=0; j<STREAM_ARRAY_SIZE; j++)
+	    e[j/4] = a[j];
 #endif
 	times[5][k] = mysecond() - times[5][k];
 	}
