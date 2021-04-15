@@ -8,7 +8,7 @@
 
 void vis_forces(int N,double *f, double *vis, double *vel);
 void add_norms(int N,double *r, double *delta);
-extern inline double force(double W, double delta, double r);
+double force(double W, double delta, double r);
 void wind_force(int N,double *f, double *vis, double vel);
 
 
@@ -25,10 +25,12 @@ double Size;
         printf("collisions %d\n",collisions);
 
 /* set the viscosity term in the force calculation */
+      // #pragma omp parallel
         for(j=0;j<Ndim;j++){
           vis_forces(Nbody,f[j],vis,velo[j]);
         }
 /* add the wind term in the force calculation */
+      // #pragma omp parallel
         for(j=0;j<Ndim;j++){
           wind_force(Nbody,f[j],vis,wind[j]);
         }
@@ -44,8 +46,8 @@ double Size;
           r[k] = sqrt(r[k]);
         }
        /* calculate central force */
-        for(i=0;i<Nbody;i++){
-	  for(l=0;l<Ndim;l++){
+        for(l=0;l<Ndim;l++){
+	  for(i=0;i<Nbody;i++){
                 f[l][i] = f[l][i] - 
                    force(G*mass[i]*M_central,pos[l][i],r[i]);
 	  }
@@ -78,11 +80,12 @@ double Size;
  * add pairwise forces.
  */
         k = 0;
-        for(i=0;i<Nbody;i++){
-          for(j=i+1;j<Nbody;j++){
-            Size = radius[i] + radius[j];
-            have_collided=0;
-            for(l=0;l<Ndim;l++){
+        for(l=0;l<Ndim;l++){
+          for(i=0;i<Nbody;i++){
+            for(j=i+1;j<Nbody;j++){
+              Size = radius[i] + radius[j];
+              have_collided=0;  
+            
 /*  flip force if close in */
               if( delta_r[k] >= Size ){
                 f[l][i] = f[l][i] - 
