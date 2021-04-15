@@ -80,12 +80,11 @@ double Size;
  * add pairwise forces.
  */
         k = 0;
-        for(l=0;l<Ndim;l++){
-          for(i=0;i<Nbody;i++){
-            for(j=i+1;j<Nbody;j++){
-              Size = radius[i] + radius[j];
-              have_collided=0;  
-            
+        for(i=0;i<Nbody;i++){
+          for(j=i+1;j<Nbody;j++){
+            Size = radius[i] + radius[j];
+            have_collided=0;  
+            for(l=0;l<Ndim;l++){
 /*  flip force if close in */
               if( delta_r[k] >= Size ){
                 f[l][i] = f[l][i] - 
@@ -97,13 +96,12 @@ double Size;
                    force(G*mass[i]*mass[j],delta_pos[l][k],delta_r[k]);
                 f[l][j] = f[l][j] - 
                    force(G*mass[i]*mass[j],delta_pos[l][k],delta_r[k]);
-		// have_collided=1;
-    collisions++;
+		have_collided=1;
               }
             }
-	    // if( have_collided == 1 ){
-	    //   collisions++;
-	    // }
+	    if( have_collided == 1 ){
+	      collisions++;
+	    }
             k = k + 1;
           }
         }
