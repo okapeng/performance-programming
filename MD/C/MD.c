@@ -97,20 +97,21 @@ double Size;
                    force(G*mass[i]*mass[j],delta_pos[l][k],delta_r[k]);
                 f[l][j] = f[l][j] - 
                    force(G*mass[i]*mass[j],delta_pos[l][k],delta_r[k]);
-		have_collided=1;
+		// have_collided=1;
+    collisions++;
               }
             }
-	    if( have_collided == 1 ){
-	      collisions++;
-	    }
+	    // if( have_collided == 1 ){
+	    //   collisions++;
+	    // }
             k = k + 1;
           }
         }
 
 /* update positions */
        #pragma omp simd
-        for(i=0;i<Nbody;i++){
-          for(j=0;j<Ndim;j++){
+        for(j=0;j<Ndim;j++){
+          for(i=0;i<Nbody;i++){
             pos[j][i] = pos[j][i] + dt * velo[j][i];
           }
         }
