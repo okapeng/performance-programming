@@ -27,28 +27,32 @@ double Size;
         printf("collisions %d\n",collisions);
 
 /* set the viscosity term in the force calculation */
+        #pragma ivdep
         for(j=0;j<Ndim;j++){
           vis_forces(Nbody,f[j],vis,velo[j]);
         }
 /* add the wind term in the force calculation */
+        #pragma ivdep
         for(j=0;j<Ndim;j++){
           wind_force(Nbody,f[j],vis,wind[j]);
         }
 /* calculate distance from central mass */
         __assume_aligned(r, 16);
+        __assume(Nbody%16==0);
         for(k=0;k<Nbody;k++){
           r[k] = 0.0;
         }
+        #pragma ivdep
         for(i=0;i<Ndim;i++){
 	  add_norms(Nbody,r,pos[i]);
         }
-        #pragma omp parallel for
+        // #pragma omp parallel for
         for(k=0;k<Nbody;k++){
           r[k] = sqrt(r[k]);
         }
        /* calculate central force */
         for(l=0;l<Ndim;l++){
-          #pragma omp parallel for
+          // #pragma omp parallel for
 	        for(i=0;i<Nbody;i++){
                 f[l][i] = f[l][i] - 
                    force(G*mass[i]*M_central,pos[l][i],r[i]);
@@ -68,13 +72,14 @@ double Size;
 
 /* calculate norm of separation vector */
         __assume_aligned(delta_r, 16);
+        __assume(Nbody%16==0);
         for(k=0;k<Npair;k++){
           delta_r[k] = 0.0;
         }
         for(i=0;i<Ndim;i++){
 	  add_norms(Npair,delta_r,delta_pos[i]);
         }
-        #pragma omp parallel for
+        // #pragma omp parallel for
         for(k=0;k<Npair;k++){
           delta_r[k] = sqrt(delta_r[k]);
         }
@@ -110,6 +115,7 @@ double Size;
         }
 
 /* update positions */
+#pragma ivdep
         for(j=0;j<Ndim;j++){
           #pragma omp simd
           for(i=0;i<Nbody;i++){
@@ -118,6 +124,7 @@ double Size;
         }
 
 /* update velocities */
+#pragma ivdep
         for(j=0;j<Ndim;j++){
           #pragma omp simd
            for(i=0;i<Nbody;i++){
