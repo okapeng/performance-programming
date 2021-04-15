@@ -53,8 +53,8 @@ double Size;
         k = 0;
         #pragma omp simd
         for(i=0;i<Nbody;i++){
-          for(j=i+1;j<Nbody;j++){
-            for(l=0;l<Ndim;l++){
+          for(l=0;l<Ndim;l++){
+            for(j=i+1;j<Nbody;j++){
               delta_pos[l][k] = pos[l][i] - pos[l][j];
             }
             k = k + 1;
