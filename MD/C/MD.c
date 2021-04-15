@@ -114,8 +114,8 @@ double Size;
 
 /* update velocities */
        #pragma omp simd
-        for(i=0;i<Nbody;i++){
-           for(j=0;j<Ndim;j++){
+        for(j=0;j<Ndim;j++){
+           for(i=0;i<Nbody;i++){
             velo[j][i] = velo[j][i] + dt * (f[j][i]/mass[i]);
           }
         }
