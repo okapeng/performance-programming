@@ -42,7 +42,7 @@ double Size;
         for(i=0;i<Ndim;i++){
 	  add_norms(Nbody,r,pos[i]);
         }
-        #pragma omp for
+        #pragma omp parallel for
         for(k=0;k<Nbody;k++){
           r[k] = sqrt(r[k]);
         }
@@ -73,7 +73,7 @@ double Size;
         for(i=0;i<Ndim;i++){
 	  add_norms(Npair,delta_r,delta_pos[i]);
         }
-        #pragma omp for
+        #pragma omp parallel for
         for(k=0;k<Npair;k++){
           delta_r[k] = sqrt(delta_r[k]);
         }
