@@ -32,6 +32,7 @@ double Size;
           wind_force(Nbody,f[j],vis,wind[j]);
         }
 /* calculate distance from central mass */
+        // __assume_aligned(r, 16);
         for(k=0;k<Nbody;k++){
           r[k] = 0.0;
         }
@@ -60,6 +61,7 @@ double Size;
         }
 
 /* calculate norm of separation vector */
+        // __assume_aligned(delta_r, 16);
         for(k=0;k<Npair;k++){
           delta_r[k] = 0.0;
         }
@@ -101,17 +103,17 @@ double Size;
         }
 
 /* update positions */
-      #pragma simd
-        for(j=0;j<Ndim;j++){
-          for(i=0;i<Nbody;i++){
+      // #pragma simd
+        for(i=0;i<Nbody;i++){
+          for(j=0;j<Ndim;j++){
             pos[j][i] = pos[j][i] + dt * velo[j][i];
           }
         }
 
 /* update velocities */
-      #pragma simd
-        for(j=0;j<Ndim;j++){
-           for(i=0;i<Nbody;i++){
+      // #pragma simd
+        for(i=0;i<Nbody;i++){
+           for(j=0;j<Ndim;j++){
             velo[j][i] = velo[j][i] + dt * (f[j][i]/mass[i]);
           }
         }
