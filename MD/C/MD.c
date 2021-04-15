@@ -54,9 +54,9 @@ double Size;
 	}
 /* calculate pairwise separation of particles */
         for(l=0;l<Ndim;l++){
-          #pragma omp simd
           for(i=0;i<Nbody;i++){
             k = 0;
+            #pragma omp simd
             for(j=i+1;j<Nbody;j++){
               delta_pos[l][k] = pos[l][i] - pos[l][j];
               k = k + 1;
