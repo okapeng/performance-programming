@@ -51,8 +51,8 @@ double Size;
 /* calculate pairwise separation of particles */
         k = 0;
         for(i=0;i<Nbody;i++){
-          for(j=i+1;j<Nbody;j++){
-            for(l=0;l<Ndim;l++){
+          for(l=0;l<Ndim;l++){
+            for(j=i+1;j<Nbody;j++){
               delta_pos[l][k] = pos[l][i] - pos[l][j];
             }
             k = k + 1;
@@ -101,15 +101,15 @@ double Size;
         }
 
 /* update positions */
-        for(i=0;i<Nbody;i++){
-          for(j=0;j<Ndim;j++){
+        for(j=0;j<Ndim;j++){
+          for(i=0;i<Nbody;i++){
             pos[j][i] = pos[j][i] + dt * velo[j][i];
           }
         }
 
 /* update velocities */
-        for(i=0;i<Nbody;i++){
-          for(j=0;j<Ndim;j++){
+        for(j=0;j<Ndim;j++){
+          for(i=0;i<Nbody;i++){
             velo[j][i] = velo[j][i] + dt * (f[j][i]/mass[i]);
           }
         }
