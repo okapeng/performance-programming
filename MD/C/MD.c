@@ -27,12 +27,10 @@ double Size;
         printf("collisions %d\n",collisions);
 
 /* set the viscosity term in the force calculation */
-      #pragma omp for
         for(j=0;j<Ndim;j++){
           vis_forces(Nbody,f[j],vis,velo[j]);
         }
 /* add the wind term in the force calculation */
-      #pragma omp for
         for(j=0;j<Ndim;j++){
           wind_force(Nbody,f[j],vis,wind[j]);
         }
@@ -41,7 +39,6 @@ double Size;
         for(k=0;k<Nbody;k++){
           r[k] = 0.0;
         }
-        #pragma omp for
         for(i=0;i<Ndim;i++){
 	  add_norms(Nbody,r,pos[i]);
         }
@@ -73,7 +70,6 @@ double Size;
         for(k=0;k<Npair;k++){
           delta_r[k] = 0.0;
         }
-        #pragma omp for
         for(i=0;i<Ndim;i++){
 	  add_norms(Npair,delta_r,delta_pos[i]);
         }
