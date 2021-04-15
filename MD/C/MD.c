@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <math.h>
 #include "coord.h"
+#include <omp.h>
+// #pragma omp parallel num_threads(8)
 
 void vis_forces(int N,double *f, double *vis, double *vel);
 void add_norms(int N,double *r, double *delta);
@@ -25,12 +27,12 @@ double Size;
         printf("collisions %d\n",collisions);
 
 /* set the viscosity term in the force calculation */
-      // #pragma omp parallel
+      #pragma omp for
         for(j=0;j<Ndim;j++){
           vis_forces(Nbody,f[j],vis,velo[j]);
         }
 /* add the wind term in the force calculation */
-      // #pragma omp parallel
+      #pragma omp for
         for(j=0;j<Ndim;j++){
           wind_force(Nbody,f[j],vis,wind[j]);
         }
@@ -39,9 +41,11 @@ double Size;
         for(k=0;k<Nbody;k++){
           r[k] = 0.0;
         }
+        #pragma omp for
         for(i=0;i<Ndim;i++){
 	  add_norms(Nbody,r,pos[i]);
         }
+        #pragma omp for
         for(k=0;k<Nbody;k++){
           r[k] = sqrt(r[k]);
         }
@@ -69,9 +73,11 @@ double Size;
         for(k=0;k<Npair;k++){
           delta_r[k] = 0.0;
         }
+        #pragma omp for
         for(i=0;i<Ndim;i++){
 	  add_norms(Npair,delta_r,delta_pos[i]);
         }
+        #pragma omp for
         for(k=0;k<Npair;k++){
           delta_r[k] = sqrt(delta_r[k]);
         }
