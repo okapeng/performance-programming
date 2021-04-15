@@ -8,7 +8,7 @@
 
 void vis_forces(int N,double *f, double *vis, double *vel);
 void add_norms(int N,double *r, double *delta);
-double force(double W, double delta, double r);
+inline double force(double W, double delta, double r);
 void wind_force(int N,double *f, double *vis, double vel);
 
 
