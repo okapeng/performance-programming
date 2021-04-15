@@ -48,7 +48,8 @@ double Size;
         }
        /* calculate central force */
         for(l=0;l<Ndim;l++){
-	  for(i=0;i<Nbody;i++){
+          #pragma omp parallel for
+	        for(i=0;i<Nbody;i++){
                 f[l][i] = f[l][i] - 
                    force(G*mass[i]*M_central,pos[l][i],r[i]);
 	  }
@@ -109,16 +110,16 @@ double Size;
         }
 
 /* update positions */
-       #pragma omp simd
         for(j=0;j<Ndim;j++){
+          #pragma omp simd
           for(i=0;i<Nbody;i++){
             pos[j][i] = pos[j][i] + dt * velo[j][i];
           }
         }
 
 /* update velocities */
-       #pragma omp simd
         for(j=0;j<Ndim;j++){
+          #pragma omp simd
            for(i=0;i<Nbody;i++){
             velo[j][i] = velo[j][i] + dt * (f[j][i]/mass[i]);
           }
