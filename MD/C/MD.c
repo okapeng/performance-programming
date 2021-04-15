@@ -101,7 +101,7 @@ double Size;
         }
 
 /* update positions */
-      #pragma ivdep
+      #pragma simd
         for(j=0;j<Ndim;j++){
           for(i=0;i<Nbody;i++){
             pos[j][i] = pos[j][i] + dt * velo[j][i];
@@ -109,7 +109,7 @@ double Size;
         }
 
 /* update velocities */
-      #pragma ivdep
+      #pragma simd
         for(j=0;j<Ndim;j++){
            for(i=0;i<Nbody;i++){
             velo[j][i] = velo[j][i] + dt * (f[j][i]/mass[i]);
