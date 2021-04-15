@@ -22,7 +22,7 @@ void add_norms(int N,double *r, double* restrict delta)
         }
 }
 
-__inline double force(double W, double delta, double r){
+double force(double W, double delta, double r){
   return W*delta/(pow(r,3.0));
 }
 
