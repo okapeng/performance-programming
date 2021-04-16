@@ -32,12 +32,15 @@ int main(int argc, char *argv[]){
   wind[Zcoord] = 0.0;
   /* set up multi dimensional arrays */
   // r = calloc(Nbody,sizeof(double));
-  r = _mm_malloc(Nbody*sizeof(double),16);
+  r = _mm_malloc(Nbody*sizeof(double),64);
   // delta_r = calloc(Nbody*Nbody,sizeof(double));
-  delta_r = _mm_malloc(Nbody*Nbody*sizeof(double),16);
-  mass = calloc(Nbody,sizeof(double));
-  radius = calloc(Nbody,sizeof(double));
-  vis = calloc(Nbody,sizeof(double));
+  delta_r = _mm_malloc(Nbody*Nbody*sizeof(double),64);
+  // mass = calloc(Nbody,sizeof(double));
+  mass = _mm_malloc(Nbody*sizeof(double),64);
+  // radius = calloc(Nbody,sizeof(double));
+  radius = _mm_malloc(Nbody*sizeof(double),64);
+  // vis = calloc(Nbody,sizeof(double));
+  vis = _mm_malloc(Nbody*sizeof(double),64);
   f[0] = calloc(Ndim*Nbody,sizeof(double));
   pos[0] = calloc(Ndim*Nbody,sizeof(double));
   velo[0] = calloc(Ndim*Nbody,sizeof(double));
