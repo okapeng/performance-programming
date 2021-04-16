@@ -47,6 +47,7 @@ double Size;
 	  add_norms(Nbody,r,pos[i]);
         }
         // #pragma omp parallel for
+        #pragma ivdep
         for(k=0;k<Nbody;k++){
           r[k] = sqrt(r[k]);
         }
@@ -80,6 +81,7 @@ double Size;
 	  add_norms(Npair,delta_r,delta_pos[i]);
         }
         // #pragma omp parallel for
+        #pragma ivdep
         for(k=0;k<Npair;k++){
           delta_r[k] = sqrt(delta_r[k]);
         }
@@ -91,7 +93,7 @@ double Size;
         for(i=0;i<Nbody;i++){
           for(j=i+1;j<Nbody;j++){
             Size = radius[i] + radius[j];
-            have_collided=0;  
+            have_collided=0;
             for(l=0;l<Ndim;l++){
 /*  flip force if close in */
               if( delta_r[k] >= Size ){
