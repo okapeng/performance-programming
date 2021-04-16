@@ -19,6 +19,18 @@ int step;
 int i,j,k,l;
 int have_collided;
 double Size;
+       __assume_aligned(pos[0], 64);
+       __assume_aligned(pos[1], 64);
+       __assume_aligned(pos[2], 64);
+       __assume_aligned(f[0], 64);
+       __assume_aligned(f[1], 64);
+       __assume_aligned(f[2], 64);
+       __assume_aligned(velo[0], 64);
+       __assume_aligned(velo[1], 64);
+       __assume_aligned(velo[2], 64);
+       __assume_aligned(delta_pos[0], 64);
+       __assume_aligned(delta_pos[1], 64);
+       __assume_aligned(delta_pos[2], 64);
 /*
  * Loop over timesteps.
  */
