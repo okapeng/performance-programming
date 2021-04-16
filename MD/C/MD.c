@@ -46,7 +46,7 @@ double Size;
 	  add_norms(Nbody,r,pos[i]);
         }
         // #pragma ivdep
-        #pragma omp simd aligned(r:64)
+        #pragma omp simd aligned(r:16)
         for(k=0;k<Nbody;k++){
           r[k] = sqrt(r[k]);
         }
@@ -71,7 +71,7 @@ double Size;
         }
 
 /* calculate norm of separation vector */
-        __assume_aligned(delta_r, 64);
+        __assume_aligned(delta_r, 16);
         for(k=0;k<Npair;k++){
           delta_r[k] = 0.0;
         }
