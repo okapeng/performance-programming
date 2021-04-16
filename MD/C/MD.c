@@ -51,7 +51,9 @@ double Size;
           r[k] = sqrt(r[k]);
         }
        /* calculate central force */
-       __assume_aligned(pos, 64);
+       __assume_aligned(pos[0], 64);
+       __assume_aligned(pos[1], 64);
+       __assume_aligned(pos[2], 64);
        #pragma omp simd aligned(f:64)
         for(l=0;l<Ndim;l++){
 	        for(i=0;i<Nbody;i++){
