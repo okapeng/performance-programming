@@ -47,13 +47,14 @@ double Size;
 	  add_norms(Nbody,r,pos[i]);
         }
         // #pragma omp parallel for
-        #pragma ivdep
+        // #pragma ivdep
+        #pragma omp simd aligned(r:16)
         for(k=0;k<Nbody;k++){
           r[k] = sqrt(r[k]);
         }
        /* calculate central force */
+       #pragma omp simd
         for(l=0;l<Ndim;l++){
-          // #pragma omp parallel for
 	        for(i=0;i<Nbody;i++){
                 f[l][i] = f[l][i] - 
                    force(G*mass[i]*M_central,pos[l][i],r[i]);
