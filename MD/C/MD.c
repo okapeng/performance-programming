@@ -105,7 +105,7 @@ double Size;
         k = 0;
         int* have_collided[Nbody];
         have_collided[0] = _mm_malloc(Nbody*Nbody*sizeof(int),64);
-        #pragma vector aligned
+        // #pragma vector aligned
         for(l=0;l<Ndim;l++){
           for(i=0;i<Nbody;i++){
             for(j=i+1;j<Nbody;j++){
