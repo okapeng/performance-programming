@@ -19,18 +19,18 @@ int step;
 int i,j,k,l;
 int have_collided;
 double Size;
-       __assume_aligned(pos[0], 64);
-       __assume_aligned(pos[1], 64);
-       __assume_aligned(pos[2], 64);
-       __assume_aligned(f[0], 64);
-       __assume_aligned(f[1], 64);
-       __assume_aligned(f[2], 64);
-       __assume_aligned(velo[0], 64);
-       __assume_aligned(velo[1], 64);
-       __assume_aligned(velo[2], 64);
-       __assume_aligned(delta_pos[0], 64);
-       __assume_aligned(delta_pos[1], 64);
-       __assume_aligned(delta_pos[2], 64);
+      //  __assume_aligned(pos[0], 64);
+      //  __assume_aligned(pos[1], 64);
+      //  __assume_aligned(pos[2], 64);
+      //  __assume_aligned(f[0], 64);
+      //  __assume_aligned(f[1], 64);
+      //  __assume_aligned(f[2], 64);
+      //  __assume_aligned(velo[0], 64);
+      //  __assume_aligned(velo[1], 64);
+      //  __assume_aligned(velo[2], 64);
+      //  __assume_aligned(delta_pos[0], 64);
+      //  __assume_aligned(delta_pos[1], 64);
+      //  __assume_aligned(delta_pos[2], 64);
 /*
  * Loop over timesteps.
  */
@@ -58,14 +58,13 @@ double Size;
 	  add_norms(Nbody,r,pos[i]);
         }
         // #pragma ivdep
+        #pragma vector aligned
         #pragma omp simd aligned(r:16)
         for(k=0;k<Nbody;k++){
           r[k] = sqrt(r[k]);
         }
        /* calculate central force */
-       __assume_aligned(pos[0], 64);
-       __assume_aligned(pos[1], 64);
-       __assume_aligned(pos[2], 64);
+       #pragma vector aligned
        #pragma omp simd aligned(f:64)
         for(l=0;l<Ndim;l++){
 	        for(i=0;i<Nbody;i++){
@@ -77,6 +76,7 @@ double Size;
         for(l=0;l<Ndim;l++){
           for(i=0;i<Nbody;i++){
             k = 0;
+            #pragma vector aligned
             #pragma omp simd aligned(delta_pos:64)
             for(j=i+1;j<Nbody;j++){
               delta_pos[l][k] = pos[l][i] - pos[l][j];
@@ -103,10 +103,12 @@ double Size;
  * add pairwise forces.
  */
         k = 0;
+        #pragma vector aligned
         for(i=0;i<Nbody;i++){
           for(j=i+1;j<Nbody;j++){
             Size = radius[i] + radius[j];
             have_collided=0;
+            #pragma vector aligned
             for(l=0;l<Ndim;l++){
 /*  flip force if close in */
               if( delta_r[k] >= Size ){
@@ -132,6 +134,7 @@ double Size;
 /* update positions */
 #pragma ivdep
         for(j=0;j<Ndim;j++){
+          #pragma vector aligned
           #pragma omp simd
           for(i=0;i<Nbody;i++){
             pos[j][i] = pos[j][i] + dt * velo[j][i];
@@ -141,6 +144,7 @@ double Size;
 /* update velocities */
 #pragma ivdep
         for(j=0;j<Ndim;j++){
+          #pragma vector aligned
           #pragma omp simd aligned(velo:64)
            for(i=0;i<Nbody;i++){
             velo[j][i] = velo[j][i] + dt * (f[j][i]/mass[i]);
