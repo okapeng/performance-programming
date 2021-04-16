@@ -51,7 +51,8 @@ double Size;
           r[k] = sqrt(r[k]);
         }
        /* calculate central force */
-       #pragma omp simd
+       __assume_aligned(pos, 64);
+       #pragma omp simd aligned(f:64)
         for(l=0;l<Ndim;l++){
 	        for(i=0;i<Nbody;i++){
                 f[l][i] = f[l][i] - 
@@ -62,7 +63,7 @@ double Size;
         for(l=0;l<Ndim;l++){
           for(i=0;i<Nbody;i++){
             k = 0;
-            #pragma omp simd
+            #pragma omp simd aligned(delta_pos:64)
             for(j=i+1;j<Nbody;j++){
               delta_pos[l][k] = pos[l][i] - pos[l][j];
               k = k + 1;
@@ -126,7 +127,7 @@ double Size;
 /* update velocities */
 #pragma ivdep
         for(j=0;j<Ndim;j++){
-          #pragma omp simd
+          #pragma omp simd aligned(velo:64)
            for(i=0;i<Nbody;i++){
             velo[j][i] = velo[j][i] + dt * (f[j][i]/mass[i]);
           }

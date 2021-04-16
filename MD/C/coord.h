@@ -24,8 +24,8 @@
 
 enum{ Xcoord=0, Ycoord, Zcoord, Ndim };
       
-DEF double *pos[Ndim], *velo[Ndim];
-DEF double *f[Ndim], *vis, *mass, *radius;
+DEF double *pos[Ndim] __attribute__((aligned(64))), *velo[Ndim] __attribute__((aligned(64)));
+DEF double *f[Ndim] __attribute__((aligned(64))), *vis, *mass, *radius;
 DEF double *delta_pos[3];
 DEF double *r;
 DEF double *delta_r;

@@ -33,15 +33,19 @@ int main(int argc, char *argv[]){
   /* set up multi dimensional arrays */
   // r = calloc(Nbody,sizeof(double));
   r = _mm_malloc(Nbody*sizeof(double),16);
-  delta_r = calloc(Nbody*Nbody,sizeof(double));
   delta_r = _mm_malloc(Nbody*Nbody*sizeof(double),16);
+  // delta_r = calloc(Nbody*Nbody,sizeof(double));
   mass = calloc(Nbody,sizeof(double));
   radius = calloc(Nbody,sizeof(double));
   vis = calloc(Nbody,sizeof(double));
-  f[0] = calloc(Ndim*Nbody,sizeof(double));
-  pos[0] = calloc(Ndim*Nbody,sizeof(double));
-  velo[0] = calloc(Ndim*Nbody,sizeof(double));
-  delta_pos[0] = calloc(Ndim*Nbody*Nbody,sizeof(double));
+  // f[0] = calloc(Ndim*Nbody,sizeof(double));
+  // pos[0] = calloc(Ndim*Nbody,sizeof(double));
+  // velo[0] = calloc(Ndim*Nbody,sizeof(double));
+  
+  f[0] = _mm_malloc(Ndim*Nbody*sizeof(double),64);
+  pos[0] = _mm_malloc(Ndim*Nbody*sizeof(double),64);
+  velo[0] = _mm_malloc(Ndim*Nbody*sizeof(double),64);
+  delta_pos[0] = _mm_malloc(Ndim*Nbody*Nbody*sizeof(double), 64);
   for(i=1;i<Ndim;i++){
     f[i] = f[0] + i * Nbody;
     pos[i] = pos[0] + i * Nbody;
