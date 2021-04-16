@@ -93,7 +93,7 @@ double Size;
         for(i=0;i<Ndim;i++){
 	  add_norms(Npair,delta_r,delta_pos[i]);
         }
-        // #pragma omp parallel for
+        #pragma omp parallel for schedule(static, 4)
         #pragma ivdep
         for(k=0;k<Npair;k++){
           delta_r[k] = sqrt(delta_r[k]);
