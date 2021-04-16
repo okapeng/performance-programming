@@ -20,18 +20,6 @@ int step;
 int i,j,k,l;
 int have_collided;
 double Size;
-      //  __assume_aligned(pos[0], 64);
-      //  __assume_aligned(pos[1], 64);
-      //  __assume_aligned(pos[2], 64);
-      //  __assume_aligned(f[0], 64);
-      //  __assume_aligned(f[1], 64);
-      //  __assume_aligned(f[2], 64);
-      //  __assume_aligned(velo[0], 64);
-      //  __assume_aligned(velo[1], 64);
-      //  __assume_aligned(velo[2], 64);
-      //  __assume_aligned(delta_pos[0], 64);
-      //  __assume_aligned(delta_pos[1], 64);
-      //  __assume_aligned(delta_pos[2], 64);
 /*
  * Loop over timesteps.
  */
@@ -65,8 +53,8 @@ double Size;
         }
        /* calculate central force */
        #pragma vector aligned
-       #pragma omp simd aligned(f:64)
         for(l=0;l<Ndim;l++){
+          #pragma omp simd
 	        for(i=0;i<Nbody;i++){
                 f[l][i] = f[l][i] - 
                    force(G*mass[i]*M_central,pos[l][i],r[i]);
@@ -77,7 +65,7 @@ double Size;
           for(i=0;i<Nbody;i++){
             k = 0;
             #pragma vector aligned
-            #pragma omp simd aligned(delta_pos:64)
+            #pragma omp simd
             for(j=i+1;j<Nbody;j++){
               delta_pos[l][k] = pos[l][i] - pos[l][j];
               k = k + 1;
@@ -93,8 +81,9 @@ double Size;
         for(i=0;i<Ndim;i++){
 	  add_norms(Npair,delta_r,delta_pos[i]);
         }
-        #pragma omp parallel for schedule(static, 4)
+        // #pragma omp parallel for schedule(static, 4)
         #pragma ivdep
+        #pragma omp simd
         for(k=0;k<Npair;k++){
           delta_r[k] = sqrt(delta_r[k]);
         }
