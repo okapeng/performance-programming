@@ -103,10 +103,11 @@ double Size;
  * add pairwise forces.
  */
         k = 0;
-        int* have_collided[Nbody];
-        have_collided[0] = _mm_malloc(Nbody*Nbody*sizeof(int),64);
+        int** have_collided[Nbody][Nbody];
+        // have_collided[0] = _mm_malloc(Nbody*Nbody*sizeof(int),64);
         // #pragma vector aligned
         for(l=0;l<Ndim;l++){
+          k=0;
           for(i=0;i<Nbody;i++){
             for(j=i+1;j<Nbody;j++){
               if(l==0) have_collided[i][j]=0;
