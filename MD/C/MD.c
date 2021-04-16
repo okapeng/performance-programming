@@ -3,6 +3,7 @@
  *  2021
  */
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include "coord.h"
 #include <omp.h>
@@ -102,12 +103,14 @@ double Size;
  * add pairwise forces.
  */
         k = 0;
+        int* have_collided[Nbody];
+        have_collided[0] = _mm_malloc(Nbody*Nbody*sizeof(int),64);
         #pragma vector aligned
-        for(i=0;i<Nbody;i++){
-          for(l=0;l<Ndim;l++){
+        for(l=0;l<Ndim;l++){
+          for(i=0;i<Nbody;i++){
             for(j=i+1;j<Nbody;j++){
+              if(l==0) have_collided[i][j]=0;
               Size = radius[i] + radius[j];
-              have_collided=0;
 /*  flip force if close in */
               if( delta_r[k] >= Size ){
                 f[l][i] = f[l][i] - 
@@ -119,12 +122,12 @@ double Size;
                    force(G*mass[i]*mass[j],delta_pos[l][k],delta_r[k]);
                 f[l][j] = f[l][j] - 
                    force(G*mass[i]*mass[j],delta_pos[l][k],delta_r[k]);
-		have_collided=1;
+		have_collided[i][j]+=1;
               }
-	    if( have_collided == 1 ){
+            k = k + 1;
+	    if( have_collided[i][j] == 1 ){
 	      collisions++;
 	    }
-            k = k + 1;
             }
           }
         }
