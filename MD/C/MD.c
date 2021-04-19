@@ -14,7 +14,6 @@ void add_norms(int N,double *r, double *delta);
 double force(double W, double delta, double r);
 void wind_force(int N,double *f, double *vis, double vel);
 
-
 void evolve(int count,double dt){
 int step;
 int i,j,k,l;
@@ -89,15 +88,11 @@ double Size;
  * add pairwise forces.
  */
         k = 0;
-        int* have_collided[Nbody];
-        have_collided[0] = _mm_malloc(Nbody*Nbody*sizeof(int),64);
-        #pragma vector aligned
-        for(l=0;l<Ndim;l++){
-          k=0;
-          for(i=0;i<Nbody;i++){
-            for(j=i+1;j<Nbody;j++){
-              if(l==0) have_collided[i][j]=0;
-              Size = radius[i] + radius[j];
+        for(i=0;i<Nbody;i++){
+          for(j=i+1;j<Nbody;j++){
+            Size = radius[i] + radius[j];
+            have_collided=0;
+            for(l=0;l<Ndim;l++){
 /*  flip force if close in */
               if( delta_r[k] >= Size ){
                 f[l][i] = f[l][i] - 
@@ -109,22 +104,22 @@ double Size;
                    force(G*mass[i]*mass[j],delta_pos[l][k],delta_r[k]);
                 f[l][j] = f[l][j] - 
                    force(G*mass[i]*mass[j],delta_pos[l][k],delta_r[k]);
-		have_collided[i][j]+=1;
+		have_collided=1;
               }
-            k = k + 1;
-	    if( have_collided[i][j] == 1 ){
+            }
+	    if( have_collided == 1 ){
 	      collisions++;
 	    }
-            }
+            k = k + 1;
           }
         }
 
 /* update positions */
-#pragma ivdep
         for(j=0;j<Ndim;j++){
           #pragma vector aligned
+          #pragma ivdep
           #pragma omp simd
-          for(i=0;i<Nbody;i++){
+           for(i=0;i<Nbody;i++){
             pos[j][i] = pos[j][i] + dt * velo[j][i];
           }
         }
@@ -133,7 +128,7 @@ double Size;
         for(j=0;j<Ndim;j++){
           #pragma vector aligned
           #pragma ivdep
-          #pragma omp simd aligned(velo:64)
+          #pragma omp simd
            for(i=0;i<Nbody;i++){
             velo[j][i] = velo[j][i] + dt * (f[j][i]/mass[i]);
           }
@@ -143,7 +138,6 @@ double Size;
       }
 
 }
-
 
 
 
